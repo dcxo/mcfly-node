@@ -5,10 +5,9 @@ import { CreateNoteDTO } from './notes.controller';
 @Injectable()
 export class NotesService {
     private readonly notes: Note[] = [];
-    private counter: number = 0;
 
     create(note: CreateNoteDTO) {
-        this.notes.push({ id: this.counter++, ...note, isFavourite: false });
+        this.notes.push({ ...note, isFavourite: false });
     }
 
     getAll(): Note[] {
@@ -16,6 +15,15 @@ export class NotesService {
     }
 
     getById(id: number) {
-        return this.notes.filter(note => note.id == id)[0]
+        return this.notes[id]
+    }
+
+    changeFavourite(id: number) {
+        let note = this.notes[id];
+        note.isFavourite = !note.isFavourite;
+    }
+
+    getFavourites(): Note[] | PromiseLike<Note[]> {
+        return this.notes.filter(note => note.isFavourite);
     }
 }
